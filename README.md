@@ -1,48 +1,133 @@
-# Commit-delete
-MindDev
-Reset the Git history of a repository while keeping the current files intact.
+<div align="center">
 
-Commit-delete is a lightweight, dependency-free Node.js CLI tool that replaces
-the entire Git history of the current repository with a single `initial release`
-commit and force-pushes the result to `origin/master`.
+![Commit-delete Banner](https://img.shields.io/badge/Commit--delete-Git%20History%20Reset-6C63FF?style=for-the-badge&logo=git&logoColor=white)
 
-> ⚠️ **WARNING: This tool is destructive.** It permanently deletes the existing
-> Git history of the repository and force-pushes the new history. Other users
-> working on the repository may need to re-clone or reset their local copy.
+# 🔄 Commit-delete
 
-## Usage
+[![Version](https://img.shields.io/badge/version-1.0.0-6C63FF?style=flat-square)](https://github.com/MindOfDaanNL/Commit-delete)
+[![License](https://img.shields.io/badge/license-MIT-6C63FF?style=flat-square)](https://github.com/MindOfDaanNL/Commit-delete/blob/main/LICENSE)
+[![Node](https://img.shields.io/badge/node-%3E%3D18-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org)
+[![Tests](https://img.shields.io/badge/tests-18%20passing-success?style=flat-square)](https://github.com/MindOfDaanNL/Commit-delete)
 
-```sh
+> Reset the Git history of a repository while keeping the current files intact  
+> Built with 💜 by [MindOfDaanNL](https://github.com/MindOfDaanNL)
+
+[Installation](#-installation) · [Usage](#-usage) · [Authentication](#-authentication) · [API](#-api) · [Contributing](#-contributing)
+
+---
+
+</div>
+
+## ✨ Features
+
+- 🔄 **One-command reset** — Replace entire Git history with a single commit
+- 📁 **Files preserved** — Your working directory stays untouched
+- 🔐 **GitHub auth** — Store accounts via Personal Access Token or Device Flow
+- 🎯 **Interactive CLI** — Beautiful prompts with branch/remote/message selection
+- 🛡️ **Safe by default** — Confirmation required, No is the default
+- 🧪 **Well tested** — 18 integration tests covering the full flow
+- 📦 **Zero dependencies** — Uses only Node.js built-ins
+- 🔧 **Flexible** — Flags for branch, remote, message, dry-run, and more
+
+---
+
+## 📸 Preview
+
+```text
+   ██████╗ ██████╗ ███╗   ███╗███╗   ███╗██╗████████╗
+  ██╔════╝██╔═══██╗████╗ ████║████╗ ████║██║╚══██╔══╝
+  ██║     ██║   ██║██╔████╔██║██╔████╔██║██║   ██║
+  ██║     ██║   ██║██║╚██╔╝██║██║╚██╔╝██║██║   ██║
+  ╚██████╗╚██████╔╝██║ ╚═╝ ██║██║ ╚═╝ ██║██║   ██║
+   ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝╚═╝   ╚═╝
+
+  COMMIT-DELETE v1.0.0  · Git history reset utility
+```
+
+---
+
+## 🚀 Installation
+
+### From npm (recommended)
+
+```bash
+npm install -g commit-delete
+```
+
+### From source
+
+```bash
+git clone https://github.com/MindOfDaanNL/Commit-delete.git
+cd Commit-delete
+npm install
+npm link
+```
+
+---
+
+## ⚡ Quick Start
+
+```bash
 cd my-project
 commit-delete
 ```
 
-The CLI:
+That's it! The CLI will guide you through the process.
 
-1. Verifies Git is installed.
-2. Verifies the current directory is a Git repository.
-3. Shows the repository information (path, branch, remote, remote URL, commit count).
-4. In an interactive terminal, lets you pick the target branch, remote and commit message.
-5. Shows a clear warning and a configuration preview.
-6. Asks for confirmation — **No is the default**.
-7. On confirmation, executes:
+---
 
-```sh
-git checkout --orphan latest_branch
-git add -A
-git commit -am "<message>"
-git branch -D <old-branch>
-git branch -M <target-branch>
-git push -f <remote> <target-branch>
+## 📖 Usage
+
+### Basic usage
+
+```bash
+cd my-project
+commit-delete
 ```
 
-## Authentication
+The CLI will:
 
-Commit-delete can store GitHub accounts for API operations (creating remotes, managing repos, etc.).
+1. Verify Git is installed
+2. Verify you're in a Git repository
+3. Show repository information
+4. Let you pick branch, remote, and commit message (interactive)
+5. Show a warning and configuration preview
+6. Ask for confirmation — **No is the default**
+7. Execute the reset and force-push
+
+### Command-line options
+
+| Flag | Description |
+|------|-------------|
+| `-b, --branch <name>` | Target branch (default: current branch) |
+| `-r, --remote <name>` | Remote to push to (default: `origin`) |
+| `-m, --message <text>` | Commit message (default: `initial release`) |
+| `-y, --yes` | Skip the confirmation prompt |
+| `-n, --dry-run` | Show commands without executing them |
+| `-h, --help` | Show help |
+
+### Examples
+
+```bash
+# Reset with custom branch and message
+commit-delete --branch main --message "fresh start"
+
+# Dry run — see what would happen
+commit-delete --dry-run
+
+# Non-interactive (CI/CD)
+commit-delete --branch main --remote origin --message "initial release" --yes
+```
+
+---
+
+## 🔐 Authentication
+
+Commit-delete can store GitHub accounts for API operations.
 
 ### Add an account
 
-```sh
+```bash
 # Interactive — choose between token or device flow
 commit-delete auth add
 
@@ -53,27 +138,19 @@ commit-delete auth add --token ghp_your_token_here
 commit-delete auth add --device
 ```
 
-### List accounts
+### Manage accounts
 
-```sh
+```bash
+# List all accounts
 commit-delete auth list
-```
 
-### Remove an account
-
-```sh
-commit-delete auth remove <username>
-```
-
-### Set active account
-
-```sh
+# Set active account
 commit-delete auth use <username>
-```
 
-### Check auth status
+# Remove an account
+commit-delete auth remove <username>
 
-```sh
+# Check auth status
 commit-delete auth status
 ```
 
@@ -86,47 +163,9 @@ commit-delete auth status
 
 Credentials are stored encrypted in `~/.commit-delete/credentials.json`.
 
-## Options
+---
 
-| Flag | Description |
-|------|-------------|
-| `-b, --branch <name>` | Target branch (default: current branch) |
-| `-r, --remote <name>` | Remote to push to (default: `origin`) |
-| `-m, --message <text>` | Commit message (default: `initial release`) |
-| `-y, --yes` | Skip the confirmation prompt |
-| `-n, --dry-run` | Show the commands without executing them |
-| `-h, --help` | Show this help |
-
-When stdin is not a terminal (for example in scripts or CI), the branch, remote
-and commit message default to the current branch, `origin` and `initial release`,
-and can be overridden with the flags above.
-
-## Installation
-
-### Globally via npm
-
-```sh
-npm install -g commit-delete
-```
-
-### From source
-
-```sh
-npm install
-npm link
-commit-delete
-```
-
-## Development
-
-```sh
-npm test
-```
-
-Tests create temporary Git repositories (including a bare remote) and verify
-the full flow end-to-end.
-
-## How it works
+## 🔧 How It Works
 
 Before the operation:
 
@@ -146,32 +185,103 @@ initial release
 
 The current files are preserved. Only the history is rewritten.
 
-## Requirements
+### Execution steps
 
-- Node.js 18+
-- Git
-- A valid Git repository
-- A remote to push to (default `origin`)
-- Permission to force-push to the remote
+```bash
+git checkout --orphan latest_branch
+git add -A
+git commit -am "<message>"
+git branch -D <old-branch>
+git branch -M <target-branch>
+git push -f <remote> <target-branch>
+```
 
-## Error handling
+---
 
-Every Git command is checked for failure. If a command fails, Commit-delete
-stops, shows the failed command and the Git error, and exits with a non-zero
-exit code.
+## 📁 Project Structure
 
-If the local history was rewritten but the remote push fails (for example when
-`origin` is missing or push permission is denied), the CLI clearly states that
-the local repository is using the new history and that the push must be done
-manually.
+```
+Commit-delete/
+├── 📁 src/
+│   ├── 📄 index.js          # CLI entry point
+│   ├── 📄 cli.js            # Interactive UI (prompts, banners, colors)
+│   ├── 📄 git.js            # Git command execution + GitHub API
+│   ├── 📄 auth.js           # Account management + encryption
+│   └── 📄 utils.js          # Color, box, and formatting helpers
+├── 📁 test/
+│   ├── 📄 git.test.js       # Unit tests for git module
+│   └── 📄 integration.test.js # End-to-end CLI tests
+├── 📄 package.json
+├── 📄 README.md
+└── 📄 LICENSE
+```
 
-## Safety
+---
 
-- The tool never initializes a Git repository automatically.
-- It never deletes project files.
-- It never asks for Git credentials — authentication is left to Git itself.
-- The confirmation happens before any repository state is changed.
+## 🛠️ Tech Stack
 
-## License
+| Technology | Purpose |
+|------------|---------|
+| ![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logo.js&logoColor=white) | Runtime |
+| ![Git](https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white) | Version control |
+| ![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=white) | Package management |
 
-[MIT](LICENSE)
+---
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+npm test
+
+# Run with coverage
+npm run test:coverage
+```
+
+Tests create temporary Git repositories (including a bare remote) and verify the full flow end-to-end.
+
+---
+
+## 📋 Changelog
+
+See the full changelog: [📄 Changelog](https://github.com/MindOfDaanNL/Projecten/blob/main/Changelogs/Commit-delete.md)
+
+### Latest Release
+
+#### `v1.0.0` — October 11, 2026
+- 🎉 Initial release
+- Interactive CLI with branch/remote/message selection
+- GitHub authentication (token + device flow)
+- Encrypted credential storage
+- Dry-run mode
+- Full test coverage
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please see the [Contributing Guide](https://github.com/MindOfDaanNL/Projecten) for details.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing`)
+5. Open a Pull Request
+
+---
+
+## 📜 License
+
+[MIT](LICENSE) © [MindOfDaanNL](https://github.com/MindOfDaanNL)
+
+---
+
+<div align="center">
+
+⭐ **Star Commit-delete if you find it useful!** ⭐
+
+[⬆ Back to Top](#-commit-delete)
+
+<sub>Made with ❤️ by [MindOfDaanNL](https://github.com/MindOfDaanNL)
+
+</div>

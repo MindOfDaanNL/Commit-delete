@@ -13,6 +13,8 @@ const BANNER = [
   '   ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝╚═╝   ╚═╝',
 ].join('\n');
 
+const WATERMARK = '  Made with ❤️ by MindOfDaanNL';
+
 function renderBanner() {
   console.log(color(BANNER, 'cyan'));
   console.log();
